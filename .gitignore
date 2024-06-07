@@ -181,3 +181,5 @@ pyrightconfig.json
 
 nohup.out
 nohup.id
+
+!src/masters/core/components/malis/malis.cpython-310-x86_64-linux-gnu.so
