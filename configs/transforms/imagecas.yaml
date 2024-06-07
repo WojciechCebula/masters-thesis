@@ -1,0 +1,77 @@
+defaults:
+  - default
+
+train:
+  - _target_: monai.transforms.LoadImaged
+    keys: ["image", "label"]
+    dtype: null
+    ensure_channel_first: true
+  - _target_: monai.transforms.Spacingd
+    keys: ["image", "label"]
+    pixdim: [0.3, 0.3, 0.3]
+    mode: ["bilinear", "nearest"]
+  - _target_: monai.transforms.RandCropByPosNegLabeld
+    keys: ["image", "label"]
+    spatial_size: [128, 128, 128]
+    label_key: "label"
+    pos: 1.0
+    neg: 1.0
+  - _target_: monai.transforms.ScaleIntensityRanged
+    keys: ["image"]
+    a_min: -600
+    a_max: 1200
+    b_min: 0
+    b_max: 1
+  - _target_: monai.transforms.RandShiftIntensityd
+    keys: ["image"]
+    prob: 0.6
+    offsets: 0.05
+  - _target_: monai.transforms.RandGaussianSmoothd
+    keys: ["image"]
+    prob: 0.6
+    sigma_x: [0.0, 0.5]
+    sigma_y: [0.0, 0.5]
+    sigma_z: [0.0, 0.5]
+  - _target_: monai.transforms.RandGaussianNoised
+    keys: ["image"]
+    prob: 0.6
+    mean: 0.0
+    std: 0.01
+  # - _target_: monai.transforms.RandAffined
+  #   keys: ["image", "label"]
+  #   spatial_size: [128, 128, 128]
+  #   rotate_range: [0, 0, 0.2094]
+  #   scale_range: [0.1, 0.1, 0.1]
+  #   mode: ["bilinear", "nearest"]
+  #   prob: 1.0
+  - _target_: masters.data.components.transforms.DistanceTransformEDTd
+    keys: ["label"]
+  - _target_: monai.transforms.CastToTyped
+    keys: ["image", "label"]
+    dtype: ["float32", "float32"]
+
+
+
+test:
+  - _target_: monai.transforms.LoadImaged
+    keys: ["image", "label"]
+    dtype: null
+    ensure_channel_first: true
+  - _target_: monai.transforms.RandCropByPosNegLabeld
+    keys: ["image", "label"]
+    spatial_size: [128, 128, 128]
+    label_key: "label"
+    pos: 0.7
+    neg: 0.3
+    num_samples: 4
+  - _target_: monai.transforms.ScaleIntensityRanged
+    keys: ["image"]
+    a_min: -600
+    a_max: 1200
+    b_min: 0
+    b_max: 1
+  - _target_: masters.data.components.transforms.DistanceTransformEDTd
+    keys: ["label"]
+  - _target_: monai.transforms.CastToTyped
+    keys: ["image", "label"]
+    dtype: ["float32", "float32"]

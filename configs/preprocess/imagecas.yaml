@@ -1,0 +1,32 @@
+defaults:
+  - default
+
+transforms:
+  - _target_: monai.transforms.LoadImaged
+    keys: ["image", "label"]
+    ensure_channel_first: true
+  - _target_: monai.transforms.Spacingd
+    keys: ["image", "label"]
+    pixdim: [1.5, 1.5, 1.5]
+    mode: ["bilinear", "nearest"]
+  - _target_: monai.transforms.ResizeWithPadOrCropd
+    keys: ["image", "label"]
+    spatial_size: [128, 128, 128]
+    mode: minimum
+  - _target_: monai.transforms.CastToTyped
+    keys: ["image", "label"]
+    dtype: ["int16", "int16"]
+  - _target_: monai.transforms.SaveImaged
+    keys: ["image"]
+    output_postfix: ""
+    output_dir: /home/wcebula/projects/masters/data/external/preprocessed-croppad-1.5-128/images
+    output_ext: .nii.gz
+    separate_folder: False
+    output_dtype: int16
+  - _target_: monai.transforms.SaveImaged
+    keys: ["label"]
+    output_postfix: ""
+    output_dir: /home/wcebula/projects/masters/data/external/preprocessed-croppad-1.5-128/labels
+    output_ext: .nii.gz
+    separate_folder: False
+    output_dtype: int16

@@ -1,0 +1,5 @@
+_target_: masters.data.imagecas_datamodule.ImageCasDataModule
+dataset_path: /home/wcebula/projects/masters/data/external/preprocessed-croppad-1.5-128-distance
+batch_size: 16 # Needs to be divisible by the number of devices (e.g., if in a distributed setup)
+num_workers: 10
+cache_rate: 1.0

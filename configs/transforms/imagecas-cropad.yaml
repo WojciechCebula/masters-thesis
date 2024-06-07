@@ -1,0 +1,44 @@
+defaults:
+  - default
+
+train:
+  - _target_: monai.transforms.LoadImaged
+    keys: ["image", "label"]
+    dtype: null
+    ensure_channel_first: true
+  - _target_: monai.transforms.CastToTyped
+    keys: ["image", "label"]
+    dtype: ["float32", "float32"]
+  - _target_: monai.transforms.RandShiftIntensityd
+    keys: ["image"]
+    prob: 0.6
+    offsets: 0.05
+  - _target_: monai.transforms.RandGaussianSmoothd
+    keys: ["image"]
+    prob: 0.6
+    sigma_x: [0.0, 0.5]
+    sigma_y: [0.0, 0.5]
+    sigma_z: [0.0, 0.5]
+  - _target_: monai.transforms.RandGaussianNoised
+    keys: ["image"]
+    prob: 0.6
+    mean: 0.0
+    std: 0.01
+  - _target_: monai.transforms.RandAffined
+    keys: ["image", "label"]
+    mode: ["bilinear", "bilinear"]
+    prob: 1.0
+    spatial_size: [128, 128, 128]
+    rotate_range: [0, 0, 0.21]
+    scale_range: [0.1, 0.1, 0.1]
+
+
+test:
+  - _target_: monai.transforms.LoadImaged
+    keys: ["image", "label"]
+    dtype: null
+    ensure_channel_first: true
+  - _target_: monai.transforms.CastToTyped
+    keys: ["image", "label"]
+    dtype: ["float32", "float32"]
+

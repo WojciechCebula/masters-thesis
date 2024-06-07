@@ -1,0 +1,32 @@
+# @package _global_
+
+# to execute this experiment run:
+# python train.py experiment=example
+
+defaults:
+  - override /data: imagecas
+  - override /model: imagecas
+
+seed: 420
+
+model:
+  loss_function:
+    _target_: masters.core.components.losses.LossCollection
+    loss_functions:
+      - _target_: torch.nn.HuberLoss
+      - _target_: masters.core.components.losses.ConnLossMultiCube
+        beta: 0.1
+        dmax: 20
+        costs_n_cap: 10.0
+        costs_p_cap: 3.0
+        window_3d: 64
+        window_2d: 32
+    loss_weights:
+      - 1.0
+      - 0.00001
+
+# - 0.0001
+# - 0.00003
+# - 0.00001
+# - 0.000003
+# - 0.000001

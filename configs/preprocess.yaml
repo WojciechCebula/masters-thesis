@@ -1,0 +1,20 @@
+# @package _global_
+
+# specify here default configuration
+# order of defaults determines the order in which configs override each other
+defaults:
+  - _self_
+  - preprocess: imagecas-distance-map
+  - paths: default
+  - hydra: default
+
+data_paths_collector: 
+  _target_: masters.data.imagecas_datamodule.ImageCasDataPathsCollectors
+  root_dir: ${paths.data_dir}/image-cas
+
+n_jobs: 8
+
+task_name: "preprocess"
+
+# seed for random number generators in pytorch, numpy and python.random
+seed: null

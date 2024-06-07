@@ -1,0 +1,11 @@
+train:
+  - _target_: torchmetrics.MeanSquaredError
+  - _target_: torchmetrics.MeanAbsoluteError
+
+
+test:
+  - _target_: torchmetrics.MeanSquaredError
+  - _target_: torchmetrics.MeanAbsoluteError
+  - _target_: masters.core.components.metrics.Completeness
+  - _target_: masters.core.components.metrics.Correctness
+  - _target_: masters.core.components.metrics.Quality

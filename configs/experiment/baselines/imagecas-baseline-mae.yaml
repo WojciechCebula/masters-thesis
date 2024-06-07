@@ -1,0 +1,15 @@
+# @package _global_
+
+# to execute this experiment run:
+# python train.py experiment=example
+
+defaults:
+  - override /data: imagecas
+  - override /model: imagecas
+
+seed: 420
+
+model:
+  loss_function:
+    _target_: torch.nn.L1Loss
+

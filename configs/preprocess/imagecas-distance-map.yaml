@@ -1,0 +1,49 @@
+defaults:
+  - default
+
+transforms:
+  - _target_: monai.transforms.LoadImaged
+    keys: ["image", "label"]
+    ensure_channel_first: true
+  - _target_: monai.transforms.CastToTyped
+    keys: ["image", "label"]
+    dtype: ["int16", "int16"]
+  - _target_: monai.transforms.Spacingd
+    keys: ["image", "label"]
+    pixdim: [1.5, 1.5, 1.5]
+    mode: ["bilinear", "nearest"]
+  - _target_: monai.transforms.ScaleIntensityRanged
+    keys: ["image"]
+    a_min: -600
+    a_max: 1200
+    b_min: 0
+    b_max: 1
+    clip: True
+  - _target_: monai.transforms.ResizeWithPadOrCropd
+    keys: ["image", "label"]
+    spatial_size: [128, 128, 128]
+    mode: ["constant", "constant"]
+  - _target_: masters.data.components.transforms.SkeletonizeLabeld
+    keys: ["label"]
+    threshold: 0.2
+  - _target_: masters.data.components.transforms.DistanceTransformEDTd
+    keys: ["label"]
+  - _target_: monai.transforms.CastToTyped
+    keys: ["image", "label"]
+    dtype: ["float32", "float32"]
+  - _target_: monai.transforms.SaveImaged
+    keys: ["image"]
+    output_postfix: ""
+    output_dir: /home/wcebula/projects/masters/data/external/preprocessed-croppad-1.5-128-distance/images
+    output_ext: .nii.gz
+    separate_folder: False
+    output_dtype: float32
+  - _target_: monai.transforms.SaveImaged
+    keys: ["label"]
+    output_postfix: ""
+    output_dir: /home/wcebula/projects/masters/data/external/preprocessed-croppad-1.5-128-distance/labels
+    output_ext: .nii.gz
+    separate_folder: False
+    output_dtype: float32
+  - _target_: monai.transforms.DeleteItemsd
+    keys: ["image", "label"]
